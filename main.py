@@ -1,124 +1,75 @@
-import time
-from time import sleep
-import sys
 import random
+import sys
+from termcolor import colored
 
-# lists of possible typos which choosing a weapon
-rock_list = ["r", "rr", "ro", "roc", "rock", "rok", "rokc", "kocr", "ockr", "ock", "korc", "kcro", "orck", "orkc"]
-paper_list = ["paper", "pappar", "pepper", "papr", "p", "pp", "pa", "pap", "pep", "pape", "pepe", "papar", "pepar", "2"]
-scissors_list = ["srossics", "scissors", "s", "ss", "sci", "sc", "sissors", "sisor", "scissor", "scisser", "scissers", "scisors", "ssissors", "scisors", "scis", "sciss", "scisso", "scisse"]
-# thinking list & possible typos for "pick for me"
-thinking_list = ["hhm", "hhmm", "hmmm", "hmmmm", "hmmmmmm", "hmmmmmmmmmmmm", "hm", "hmm", "uhh", "i dont know", "idk", "dont know" "don't know", "i don't know", "cant choose", "can't choose", "can't pick", "cant pick", "idfk"]
-pick_for_me_list = ["pick 4me", "pick4 me", "pick forme", "pck for me", "pock for me", "pick for m", "pick for e", "pick for me", "pickforme", "pick4me", "pick 4 me", "pickfor me", "pick forme", "pick for me"]
+human_score = 0
+comp_score = 0
+draw_score = 0
+Rock = colored("Rock", "yellow")
+Paper = colored("Paper", "cyan")
+Scissors = colored("Scissors", "blue")
 
-# range of delay for the "results..." output
-upper_range = 0.2
-lower_range = 0.1
-# delay duration after displaying the computer's weapon
-# draw = lengthiest text
-# win = shortest text
-comp_delay_draw = 1.5
-comp_delay_win = 0.5
-comp_delay_lose = 0.8
-# delay after repeating the player's weapon
-choice_delay = 1
-# delay for the "pick for me" easter egg computer result (all the same length)
-comp_delay_pick = 1
+weapon_list = [Rock, Paper, Scissors]
 
-def result_calc(player_weapon, comp_message, comp_delay, result_draw):
-    print(player_weapon + " Nice choice!"); sleep(choice_delay)
-    print(comp_message)
-    sleep(comp_delay)
-    sys.stdout.write('Result'); sleep(random.uniform(lower_range, upper_range))
-    sys.stdout.write('.'); sleep(random.uniform(lower_range, upper_range))
-    sys.stdout.write('.'); sleep(random.uniform(lower_range, upper_range))
-    sys.stdout.write('.'); sleep(random.uniform(lower_range, upper_range))
-    sys.stdout.write('\n' + result_draw); sleep(0.1)
-    sys.stdout.write('\n')
-    pick_one()
+win_score = abs(int(input("First to ___ wins: ")))
 
-def pick_one():
-# randomly generated number indicating the computer's move:
-# 0 = rock
-# 1 = paper
-# 2 = scissors
-    comp_weapon = random.randint(0, 2)
-    while True:
-        try:
-            question = str(input('Your weapon of choice: '))
-            question.lower()
-            break
-        except:
-            print("That's not a valid option!")
 
-    if question in pick_for_me_list:
-        picked_weapon = random.randint(0, 2)
-        if picked_weapon == 0:
-            if comp_weapon == 0:
-                result_calc("We chose rock for you.", "The clash of computers has lead the opposing computer to pick rock as well", comp_delay_draw, "Draw!")
-                pick_one()
-            if comp_weapon == 1:
-                result_calc("We chose rock for you.", "Unfortunately, the opposing computer picked paper.", comp_delay_lose, "Defeat!")
-                pick_one()
-            if comp_weapon == 2:
-                result_calc("We chose rock for you.", "The opposing computer picked scissors.", comp_delay_win, "Victory!")
-                pick_one()
-        elif picked_weapon == 1:
-            if comp_weapon == 0:
-                result_calc("We chose paper for you", "The opposing computer chose rock", comp_delay_win, "Victory!")
-                pick_one()
-            if comp_weapon == 1:
-                result_calc("We chose paper for you", "Great computer minds think alike. The opposing computer chose paper as well.", comp_delay_draw, "Draw!")
-                pick_one()
-            if comp_weapon == 2:
-                result_calc("We chose paper for you", "Unfortunately, the opposing computer chose scissors.", comp_delay_lose, "Defeated!")
-                pick_one()
-        elif picked_weapon == 2:
-            if comp_weapon == 0:
-                result_calc("We chose scissors for you.", "Unfortunately, the computer chose rock.", comp_delay_lose, "Defeated!")
-                pick_one()
-            if comp_weapon == 1:
-                result_calc("We chose scissors for you.", "The computer chose paper.", comp_delay_win, "Victory!")
-                pick_one()
-            if comp_weapon == 2:
-                result_calc("We chose scissors for you", "The clash of computers has lead the opposing computer to pick rock as well", comp_delay_draw, "Draw!")
-                pick_one()
+def human_weapon():
+    human_input = input("R = Rock, P = Paper, & S = Scissors\nYour weapon: ")
+    if human_input == "R" or human_input == "r":
+        return Rock
+    elif human_input == "P" or human_input == "p":
+        return Paper
+    elif human_input == "S" or human_input == "s":
+        return Scissors
 
-    elif question in rock_list:
-        if comp_weapon == 0:
-            result_calc("Rock!", "Great minds think alike. The computer chose rock as well.", comp_delay_draw, "Draw!")
-            pick_one()
-        if comp_weapon == 1:
-            result_calc("Rock!", "Unfortunately, the computer chose paper.", comp_delay_lose, "Defeated!")
-            pick_one()
-        if comp_weapon == 2:
-            result_calc("Rock!", "The computer chose scissors.", comp_delay_win, "Victory!")
-            pick_one()
-    elif question in paper_list:
-        if comp_weapon == 0:
-            result_calc("Paper!", "The computer chose rock", comp_delay_win, "Victory!")
-            pick_one()
-        if comp_weapon == 1:
-            result_calc("Paper!", "Great minds think alike. The computer chose paper as well.", comp_delay_draw, "Draw!")
-            pick_one()
-        if comp_weapon == 2:
-            result_calc("Paper!", "Unfortunately, the computer chose scissors.", comp_delay_lose, "Defeated!")
-            pick_one()
-    elif question in scissors_list:
-        if comp_weapon == 0:
-            result_calc("Scissors!", "Unfortunately, the computer chose rock.", comp_delay_lose, "Defeated!")
-            pick_one()
-        if comp_weapon == 1:
-            result_calc("Scissors!", "The computer chose paper.", comp_delay_win, "Victory!")
-            pick_one()
-        if comp_weapon == 2:
-            result_calc("Scissors!", "Great minds think alike. The computer chose scissors as well.", comp_delay_draw, "Draw!")
-            pick_one()
-    elif question in thinking_list:
-        print("Can't think of what to choose? Maybe try \"pick for me\".")
-        pick_one()
+
+def decider(hw, cw):
+    global human_score
+    global comp_score
+    global draw_score
+
+    print(f"\n{hw} vs {cw}")
+    win_msg = colored("You've won!", "green")
+    if hw is None:
+        return print(colored("Error: please pick a weapon.", "red"))
+    elif hw == Rock and cw == Scissors:
+        print(win_msg)
+        human_score += 1
+    elif hw == Paper and cw == Rock:
+        print(win_msg)
+        human_score += 1
+    elif hw == Scissors and cw == Paper:
+        print(win_msg)
+        human_score += 1
+    elif hw == cw:
+        print(colored("It's a draw!", "magenta"))
     else:
-        pick_one()
+        print(colored("You've lost.", "red"))
+        comp_score += 1
+    print(f"\nScore: {comp_score} to {human_score_color()}\n ")
 
 
-pick_one()
+def human_score_color():
+    human_score_green = colored(str(human_score), "green")
+    human_score_yellow = colored(str(human_score), "yellow")
+    human_score_red = colored(str(human_score), "red")
+    humans_green = colored("humans", "green")
+    comp_red = colored("computer", "red")
+    if human_score > comp_score:
+        return f"{human_score_green}\nThe {humans_green} are winning!"
+    elif human_score == comp_score:
+        return f"{human_score_yellow}\nIt's a tie for now"
+    else:
+        return f"{human_score_red}\nThe {comp_red} is winning!"
+
+
+while True:
+    if human_score >= win_score:
+        print(colored("You've won the game!", "green"))
+        sys.exit()
+    elif comp_score >= win_score:
+        print(colored("The computer has won the game.", "red"))
+        sys.exit()
+    else:
+        decider(human_weapon(), random.choice(weapon_list))
